@@ -1,0 +1,16 @@
+@charset "UTF-8";
+@forward "./sass/index";
+@use "./sass/more/variable" as var;
+
+//I_---------{  google font-family CDN  }---------- //
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Caveat:wght@400..700&family=Merienda:wght@300..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Salsa&display=swap');
+
+//W_----------{  Author      :   Bisakto-Rahi  }----------- //
+//W_----------{  Create      :   18/10/2024    }----------- //
+//W_----------{  Last Update :   11/05/2024   }------------ //
+
+//G_--------------{  Start Default Style For all  }-------------- //
+h2{
+    text-align: center;
+    font-size: 35px;
+}

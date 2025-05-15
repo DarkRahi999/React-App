@@ -1,0 +1,28 @@
+@charset "UTF-8";
+@use "./variable" as var;
+//O_----------{ My Common class for Font  }---------- //
+@mixin fontStyle($font, $weight){
+  font-family: $font;
+  font-weight: $weight;
+}
+*{
+  @include fontStyle(var.$font-1, 400);
+}        //Y_----------{  Font weight : 0nly 400 are available  }---------- //
+p{
+  @include fontStyle(var.$font-2, 400);
+}        //Y_----------{  Font weight : 400 - 700	are available  }----------//
+.sub-heading{
+  @include fontStyle(var.$font-3, 400);
+}        //Y_----------{  Font weight : 0nly 400 are available  }---------- //
+.pera{
+  @include fontStyle(var.$font-4, 600);
+}       //Y_----------{  Font weight : 300 - 900	are available  }----------//
+.pera-2{
+  @include fontStyle(var.$font-5, 500);
+}       //Y_----------{  Font weight : 400 - 700	are available  }----------//
+.center{
+  text-align: center;
+}
+.justify{
+  text-align: justify;
+}
