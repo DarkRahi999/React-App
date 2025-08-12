@@ -5,7 +5,6 @@ export default function FullWidthSorry() {
   const maxVisibleMiniSorry = 15;
   const emojis = ["❤️", "🥺", "🙏", "😔", "💔"];
 
-  // Mini sorry objects with random positions (full screen)
   const [miniSorryPool] = useState(() => {
     const arr = [];
     const width = window.innerWidth;
@@ -18,63 +17,57 @@ export default function FullWidthSorry() {
         size: 0.8 + Math.random() * 0.7,
         rotate: Math.random() * 40 - 20,
         emoji: emojis[i % emojis.length],
-        fadeDelay: Math.random() * 5000, // fade timing stagger
+        fadeDelay: Math.random() * 7000,
       });
     }
     return arr;
   });
 
-  // State control
   const [visibleMiniSorry, setVisibleMiniSorry] = useState([]);
   const [showFinalBatch, setShowFinalBatch] = useState(false);
   const [showMainSorry, setShowMainSorry] = useState(true);
-  const [showMessage, setShowMessage] = useState(false);
+  const [showFinalMessage, setShowFinalMessage] = useState(false);
 
   const timers = useRef([]);
 
-  // Start animation sequence
   const startAnimation = () => {
-    if (timers.current.length) return; // Prevent multiple starts
+    if (timers.current.length) return;
 
-    // 1. Show random fading mini sorry for 14 seconds
     setVisibleMiniSorry(
       miniSorryPool
         .sort(() => 0.5 - Math.random())
         .slice(0, maxVisibleMiniSorry)
         .map((s) => s.id)
     );
+    setShowMainSorry(true);
+    setShowFinalBatch(false);
+    setShowFinalMessage(false);
 
-    // Timer 1: After 14s show final batch (12-15 sorry on main sorry fade out)
     const t1 = setTimeout(() => {
-      // Show final batch mini sorry near main sorry (top center, falling down)
       setVisibleMiniSorry([]);
       setShowFinalBatch(true);
     }, 14000);
 
-    // Timer 2: After 14s + 7s fade out main sorry and final batch
     const t2 = setTimeout(() => {
       setShowMainSorry(false);
       setShowFinalBatch(false);
     }, 21000);
 
-    // Timer 3: After 21s show final message
     const t3 = setTimeout(() => {
-      setShowMessage(true);
+      setShowFinalMessage(true);
     }, 22000);
 
-    // Timer 4: Reset all after 60s to allow re-trigger
     const t4 = setTimeout(() => {
       setVisibleMiniSorry([]);
       setShowFinalBatch(false);
       setShowMainSorry(true);
-      setShowMessage(false);
+      setShowFinalMessage(false);
       timers.current = [];
     }, 60000);
 
     timers.current.push(t1, t2, t3, t4);
   };
 
-  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
       timers.current.forEach(clearTimeout);
@@ -82,7 +75,6 @@ export default function FullWidthSorry() {
     };
   }, []);
 
-  // Final batch positions around main sorry (top center, falling down)
   const finalBatchCount = 15;
   const centerX = window.innerWidth / 2;
   const finalBatchStartY = window.innerHeight / 2 - 160;
@@ -115,7 +107,7 @@ export default function FullWidthSorry() {
       }}
     >
       {/* Main Sorry */}
-      {showMainSorry && (
+      {showMainSorry && !showFinalMessage && (
         <div
           onClick={startAnimation}
           style={{
@@ -207,7 +199,7 @@ export default function FullWidthSorry() {
         ))}
 
       {/* Final message */}
-      {showMessage && (
+      {showFinalMessage && (
         <div
           style={{
             position: "fixed",
@@ -215,12 +207,12 @@ export default function FullWidthSorry() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             fontSize: "2.5rem",
-            fontWeight: "700",
+            fontWeight: "bold",
             color: "#b91c1c",
             userSelect: "none",
             textAlign: "center",
             opacity: 1,
-            transition: "opacity 2s ease",
+            animation: "fadeInMessage 3s ease forwards",
             zIndex: 25,
             padding: "0 1rem",
           }}
@@ -247,6 +239,10 @@ export default function FullWidthSorry() {
             opacity: 0;
             transform: translateY(150px) rotate(20deg);
           }
+        }
+        @keyframes fadeInMessage {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
 
         @media (max-width: 600px) {

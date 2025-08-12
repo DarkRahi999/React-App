@@ -1,10 +1,10 @@
-import {Body} from './components'
-import './CSS/style.css'
+import FullWidthSorry from "./components/index3"
+
 function App() {
   return (
-    <>
-    <Body></Body>
-    </>
+    <div>
+      <FullWidthSorry></FullWidthSorry>
+    </div>
   )
 }
 export default App
